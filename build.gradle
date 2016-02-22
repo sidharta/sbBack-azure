@@ -1,0 +1,50 @@
+buildscript {
+    repositories {
+        maven { url 'http://repo.springsource.org/libs-snapshot' }
+        mavenLocal()
+    }
+    dependencies {
+        classpath('org.springframework.boot:spring-boot-gradle-plugin:1.3.0.RELEASE')
+
+        // to work on gae
+        // classpath 'com.google.appengine:gradle-appengine-plugin:1.9.30'
+    }
+}
+
+apply plugin: 'java'
+apply plugin: 'idea'
+// apply plugin: 'spring-boot'
+
+// to work on gae
+// apply plugin: 'war'
+// apply plugin: 'appengine'
+
+jar {
+    baseName = 'spBack'
+    version =  '0.1.0'
+}
+
+repositories {
+    mavenCentral()
+    maven { url 'http://repo.springsource.org/libs-snapshot' }
+}
+
+dependencies {
+    compile('org.springframework.boot:spring-boot-starter-web:1.3.0.RELEASE'){
+        exclude module: 'spring-boot-starter-tomcat'
+    }
+    compile 'org.springframework.boot:spring-boot-starter-actuator:1.3.0.RELEASE'
+
+    // to work on gae
+    // compile 'org.springframework.boot:spring-boot-legacy:1.0.2.RELEASE'
+    // appengineSdk 'com.google.appengine:appengine-java-sdk:1.9.30'
+}
+
+task (run, dependsOn: build, type:JavaExec){
+    main = 'com.ciandt.spBack.Application'
+    classpath = sourceSets.main.runtimeClasspath
+}
+
+task (type: Wrapper) {
+    gradleVersion = '1.8'
+}
